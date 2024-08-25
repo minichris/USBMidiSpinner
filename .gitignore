@@ -2,3 +2,5 @@
 .cache
 compile_commands.json
 .DS_Store
+.vscode/launch.json
+.vscode/c_cpp_properties.json
