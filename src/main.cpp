@@ -6,6 +6,8 @@
 //#include <Bounce2.h>
 //#include <ResponsiveAnalogRead.h>
 
+#define SERIALPRINT 0
+
 const int HallAMax = 2100;
 const int HallAMin = 2040;
 const int HallBMax = 2040;
@@ -16,7 +18,9 @@ Adafruit_USBD_MIDI usbMidi;
 MIDI_CREATE_INSTANCE(Adafruit_USBD_MIDI, usbMidi, MIDI);
 
 void setup() {
+#if SERIALPRINT
   Serial.begin(115200);
+#endif
 
   TinyUSBDevice.setManufacturerDescriptor("Christopher Lee");
   TinyUSBDevice.setProductDescriptor("Fidget 2000");
@@ -58,7 +62,9 @@ bool WaitingForDrop = false;
 bool BReachedMax = false;
 void PickupAndDropMode(){
     if(!WaitingForDrop){
+#if SERIALPRINT
 		Serial.print("   Rising, waiting for drop...");
+#endif
 		if (MidiA != LastSentMidiA) {
 			MIDI.send(midi::ControlChange, 1, MidiA, 12U);
 			LastSentMidiA = MidiA;
@@ -68,7 +74,9 @@ void PickupAndDropMode(){
 		}
 	}
 	else{
+#if SERIALPRINT
 		Serial.print("   dropping, waiting for rise...");
+#endif
 		if (MidiB != LastSentMidiB) {
 			if(MidiB > 120){
 				BReachedMax = true;
@@ -116,6 +124,7 @@ void loop() {
   analogB = analogRead(A1);
   MidiA = MapToMidi(analogA, HallAMin, HallAMax);
   MidiB = MapToMidi(analogB, HallBMin, HallBMax);
+#if SERIALPRINT
   Serial.print("\nAnalog A value: ");
   Serial.print(analogA);
   Serial.print("\nAnalog B value: ");
@@ -128,7 +137,7 @@ void loop() {
   Serial.print(LastSentMidiA);
   Serial.print("\nLast sent channel B: ");
   Serial.print(LastSentMidiB);
-
+#endif
   if(HIGH == digitalRead(10)){
 	Mode = 0;
   }
@@ -142,17 +151,27 @@ void loop() {
   switch(Mode){
 	case 0:
 	PickupAndDropMode();
+#if SERIALPRINT
 	Serial.println("\nPickupAndDropMode");
+#endif
 	break;
 	case 1:
 	SendTogether();
+#if SERIALPRINT
 	Serial.println("\nSendTogether");
+#endif
 	break;
 	case 2:
 	SendSeperately();
+#if SERIALPRINT
 	Serial.println("\nSendSeperately");
+#endif
 	break;
   }
-
-  delay(10);
+  
+#if SERIALPRINT
+  delay(20);
+#else
+  delay(5);
+#endif
 }
