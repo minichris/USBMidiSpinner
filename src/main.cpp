@@ -9,9 +9,9 @@
 #define SERIALPRINT 0
 
 const int HallAMax = 2100;
-const int HallAMin = 2040;
+const int HallAMin = 2050;
 const int HallBMax = 2040;
-const int HallBMin = 1980;
+const int HallBMin = 2000;
 
 // USB MIDI object
 Adafruit_USBD_MIDI usbMidi;
@@ -23,7 +23,7 @@ void setup() {
 #endif
 
   TinyUSBDevice.setManufacturerDescriptor("Christopher Lee");
-  TinyUSBDevice.setProductDescriptor("Fidget 2000");
+  TinyUSBDevice.setProductDescriptor("Fidget 2000 by Chris");
 
   usbMidi.begin();
   MIDI.begin();
@@ -120,6 +120,10 @@ void SendSeperately(){ //sends each pickup as its own channel
 auto pastLEDState = true;
 int Mode = -1;
 void loop() {
+	if (BOOTSEL) {
+		rp2040.rebootToBootloader();
+	}
+
   analogA = analogRead(A2);
   analogB = analogRead(A1);
   MidiA = MapToMidi(analogA, HallAMin, HallAMax);
