@@ -10,8 +10,8 @@
 
 const int HallAMax = 2100;
 const int HallAMin = 2050;
-const int HallBMax = 2040;
-const int HallBMin = 2000;
+const int HallBMax = 2800;
+const int HallBMin = 2100;
 
 // USB MIDI object
 Adafruit_USBD_MIDI usbMidi;
@@ -23,7 +23,7 @@ void setup() {
 #endif
 
   TinyUSBDevice.setManufacturerDescriptor("Christopher Lee");
-  TinyUSBDevice.setProductDescriptor("Fidget 2000 by Chris");
+  TinyUSBDevice.setProductDescriptor("Fidget 3000 by Chris");
 
   usbMidi.begin();
   MIDI.begin();
@@ -44,6 +44,13 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
 
   analogReadResolution(12);
+}
+
+void loop1(){
+	digitalWrite(LED_BUILTIN, HIGH);
+	delay(250);
+	digitalWrite(LED_BUILTIN, LOW);
+	delay(250);
 }
 
 int MapToMidi(int input, int inputMin, int inputMax) {
